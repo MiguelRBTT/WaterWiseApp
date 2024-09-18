@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waterwisen1/calendar.dart';
 import 'package:waterwisen1/home.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: const Calendar(),
       title: 'Water Wise',
 
     );
