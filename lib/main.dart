@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waterwisen1/calculator.dart';
 import 'package:waterwisen1/home.dart';
 
 void main() {
@@ -11,8 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
       title: 'Water',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/calculator': (context) => const Calculator()
+      },
       debugShowCheckedModeBanner: false,
     );
   }
