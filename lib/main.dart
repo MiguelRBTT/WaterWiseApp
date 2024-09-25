@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:waterwisen1/calendar_big.dart';
 import 'package:waterwisen1/home.dart';
 import 'package:waterwisen1/calendar_small.dart';
 
@@ -13,9 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CalendarSmall(),
-      title: 'Water Wise',
-
+      title: 'Water',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/calculator': (context) => const Calculator()
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
