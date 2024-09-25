@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:waterwisen1/calculator.dart';
 import 'package:waterwisen1/home.dart';
+import 'package:waterwisen1/calendar_small.dart';
 
 void main() {
   runApp(const MyApp());
