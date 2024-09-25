@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
               ),
               child: const Text(
                 'Entrar',
-                style: TextStyle(color: Color(0xFF40FFDC)),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],

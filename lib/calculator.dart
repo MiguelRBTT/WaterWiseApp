@@ -6,6 +6,7 @@ class Calculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -13,29 +14,44 @@ class Calculator extends StatelessWidget {
           },
           child: Icon(
             Icons.keyboard_backspace,
-            color: Color(0xFF40FFDC),
+            color: Colors.white,
           ),
         ),
         title: Text(
           'Calculadora de Água',
-          style: TextStyle(color: Color(0xFF40FFDC)),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xFF1C3166),
+        backgroundColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF00A9D4),
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF00A9D4),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WaterCalculatorPage()),
+                );
+              },
+              child: Text('Calcular consumo de água',
+                  style: TextStyle(color: Colors.white)),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => WaterCalculatorPage()),
-              );
-            },
-            child: Text('Calcular consumo de água'),
+          ),
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF40FFDC),
+              Color(0xFF00A9D4),
+              Color(0xFF1C3166),
+            ],
           ),
         ),
       ),
@@ -71,52 +87,78 @@ class _WaterCalculatorPageState extends State<WaterCalculatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Calculadora de Água'),
-        backgroundColor: Color(0xFF1C3166),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.keyboard_backspace,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(
+          'Calculadora de Água',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _weightController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Insira seu peso (kg)',
-                border: OutlineInputBorder(),
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                controller: _weightController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Insira seu peso (kg)',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    Color(0xFF00A9D4), // Botão com a cor principal do tema
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Color(0xFF00A9D4), // Botão com a cor principal do tema
+                ),
+                onPressed: _calculateWaterIntake,
+                child: Text('Calcular', style: TextStyle(color: Colors.white)),
               ),
-              onPressed: _calculateWaterIntake,
-              child: Text('Calcular'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              _result,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                color: Color(0xFF1C3166),
+              SizedBox(height: 20),
+              Text(
+                _result,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF1C3166),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF40FFDC),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF40FFDC),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/calendar');
+                },
+                child: Text('Continuar', style: TextStyle(color: Colors.white)),
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Voltar'),
-            ),
-          ],
+            ],
+          ),
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF40FFDC),
+              Color(0xFF00A9D4),
+              Color(0xFF1C3166),
+            ],
+          ),
         ),
       ),
     );
