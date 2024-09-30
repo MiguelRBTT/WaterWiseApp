@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+double? qtd_drink = 0;
+
 class Calculator extends StatefulWidget {
   const Calculator({super.key});
 
@@ -10,8 +12,7 @@ class Calculator extends StatefulWidget {
 class _CalculatorState extends State<Calculator> {
   final TextEditingController _weightController = TextEditingController();
   String _result = '';
-  double?
-      qtd_drink; // Variável que irá armazenar a quantidade de água a ser bebida
+  // Variável que irá armazenar a quantidade de água a ser bebida
 
   void _calculateWaterIntake() {
     final weight = double.tryParse(_weightController.text);
@@ -71,7 +72,7 @@ class _CalculatorState extends State<Calculator> {
                   controller: _weightController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    labelText: 'Faça sua estimativa',
+                    labelText: 'Qual é o seu peso?',
                     labelStyle: TextStyle(color: Colors.white54),
                     filled: true,
                     fillColor: Colors.white24,

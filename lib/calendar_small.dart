@@ -1,220 +1,208 @@
-import 'dart:async'; // Import necessário para usar o Timer
+import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
-class CalendarSmall extends StatefulWidget {
+import 'calculator.dart';
+
+class CalendarSmall extends StatelessWidget {
   const CalendarSmall({super.key});
-
-  @override
-  State<CalendarSmall> createState() => _CalendarSmallState();
-}
-
-class _CalendarSmallState extends State<CalendarSmall> {
-  final daysH = 70.0;
-  double waterLevel = 0; // Nível de água
-  bool isPlugged = true; // Variável para saber se o tampão está no lugar
-  Timer? _timer; // Timer para controlar o incremento e decremento contínuo
-
-  // Função para começar a aumentar o nível de água
-  void _startIncreasingWaterLevel() {
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      setState(() {
-        waterLevel += 10;
-        if (waterLevel > 1000) waterLevel = 1000; // Limite máximo da água
-      });
-    });
-  }
-
-  // Função para parar de aumentar o nível de água
-  void _stopIncreasingWaterLevel() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-  }
-
-  // Função para começar a diminuir o nível de água (escoamento)
-  void _startDecreasingWaterLevel() {
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-      setState(() {
-        waterLevel -= 10;
-        if (waterLevel < 0) waterLevel = 0; // Limite mínimo da água
-      });
-    });
-  }
-
-  // Função para parar de escoar a água
-  void _stopDecreasingWaterLevel() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-  }
-
-  // Função chamada quando o tampão é arrastado
-  void _onDragPlug(DragEndDetails details) {
-    setState(() {
-      isPlugged = !isPlugged; // Alterna entre tampão no lugar ou fora
-      if (isPlugged) {
-        _stopDecreasingWaterLevel();
-      } else {
-        _startDecreasingWaterLevel(); // Começa a escoar quando o tampão é removido
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('WaterWise')),
-      body: Column(
-        children: [
-          const SizedBox(height: 60),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  color: Colors.cyan, borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildDayColumn('Dom'),
-                  _buildDayColumn('Seg'),
-                  _buildDayColumn('Ter'),
-                  _buildDayColumn('Qua'),
-                  _buildDayColumn('Qui'),
-                  _buildDayColumn('Sex'),
-                  _buildDayColumn('Sáb'),
-                ],
-              ),
-            ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          title: const Text(
+            'WaterWise',
+            style: TextStyle(color: Colors.white),
           ),
-          const SizedBox(height: 30),
-          GestureDetector(
-            onTapDown: (_) => _startIncreasingWaterLevel(),
-            onTapUp: (_) => _stopIncreasingWaterLevel(),
-            onTapCancel: _stopIncreasingWaterLevel,
-            child: Container(color: Colors.grey, width: 30, height: 30),
-          ),
-          Container(color: Colors.brown, width: 30, height: 60),
-          const SizedBox(height: 50),
-          Stack(
-            children: [
-              CustomPaint(
-                size: const Size(200, 340),
-                painter: GlassOutlinePainter(waterLevel, isPlugged),
-              ),
-              Positioned(
-                bottom: 200,
-                left: 64,
-                child: Text(
-                  '${waterLevel.toStringAsFixed(0)}ml',
-                  style: const TextStyle(fontSize: 25),
-                ),
-              ),
-              Positioned(
-                bottom: 12, // Coloca o tampão na base do copo
-                left: 80,
-                child: GestureDetector(
-                  onTapDown: (_) => _startDecreasingWaterLevel(),
-                  onTapUp: (_) => _stopDecreasingWaterLevel(),
-                  onTapCancel: _stopDecreasingWaterLevel,
-                  // Detecta arrasto do tampão
-                  child: Container(
-                    width: 40,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: isPlugged ? Colors.grey : Colors.grey,
-                      // Cor muda conforme tampão
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
+          backgroundColor: Colors.transparent),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF40FFDC),
+              Color(0xFF00A9D4),
+              Color(0xFF1C3166),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDayColumn(String day) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-      child: Column(
-        children: [
-          Text(day,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold)),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Container(
-                width: 10,
-                height: daysH,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(100)),
-                child: Image.asset('assets/waves.jpg', fit: BoxFit.cover)),
-          ),
-        ],
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 150),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: CalendarioRandomizado(),
+            ),
+            const SizedBox(height: 30),
+            TorneiraCopo()
+          ],
+        ),
       ),
     );
   }
 }
 
-class GlassOutlinePainter extends CustomPainter {
-  final double waterLevel;
-  final bool isPlugged;
-
-  GlassOutlinePainter(this.waterLevel, this.isPlugged);
+class MyClipper extends CustomClipper<Path> {
+  final angle = 30.0;
+  final slimeter = 25.0;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blueAccent
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4;
-
-    Path path = Path();
-
-    // Contorno do copo com bordas arredondadas
-    path.moveTo(size.width * 0.1, size.height * 0.1);
-    path.quadraticBezierTo(size.width * 0.5, size.height * 0.02,
-        size.width * 0.9, size.height * 0.1);
-    path.quadraticBezierTo(size.width * 0.95, size.height * 0.3,
-        size.width * 0.75, size.height * 0.9);
-    path.quadraticBezierTo(
-        size.width * 0.5, size.height, size.width * 0.25, size.height * 0.9);
-    path.quadraticBezierTo(size.width * 0.05, size.height * 0.3,
-        size.width * 0.1, size.height * 0.1);
-    path.close();
-
-    canvas.drawPath(path, paint);
-
-    // Desenho da água
-    final waterPaint = Paint()
-      ..color = Colors.blue.withOpacity(0.6)
-      ..style = PaintingStyle.fill;
-
-    canvas.save();
-    canvas.clipPath(path);
-
-    double waterHeight = (waterLevel / 1000) * size.height;
-
-    canvas.drawRect(
-      Rect.fromLTWH(0, size.height - waterHeight, size.width, waterHeight),
-      waterPaint,
-    );
-
-    canvas.restore();
-
-    // Desenho do ralo
-    final drainPaint = Paint()..color = Colors.black;
-    canvas.drawCircle(
-        Offset(size.width * 0.5, size.height * 0.95), 10, drainPaint);
+  Path getClip(Size size) {
+    return Path()
+      ..moveTo(angle, 0)
+      ..quadraticBezierTo(0, 0, 0, angle)
+      ..lineTo(slimeter, size.height - angle)
+      ..quadraticBezierTo(slimeter, size.height, angle * 2, size.height)
+      ..lineTo(size.width - angle * 2, size.height)
+      ..quadraticBezierTo(size.width - slimeter, size.height,
+          size.width - slimeter, size.height - angle)
+      ..lineTo(size.width, angle)
+      ..quadraticBezierTo(size.width, 0, size.width - angle, 0)
+      ..close();
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
+
+class TorneiraCopo extends StatefulWidget {
+  const TorneiraCopo({super.key});
+
+  @override
+  State<TorneiraCopo> createState() => _TorneiraCopoState();
+}
+
+class _TorneiraCopoState extends State<TorneiraCopo> {
+  int ml = 0;
+  Timer? _timer;
+
+  void _increaseWaterLevel() {
+    setState(() {
+      ml += 10;
+    });
+  }
+
+  void _startIncreasing() {
+    _timer = Timer.periodic(const Duration(milliseconds: 20), (timer) {
+      _increaseWaterLevel();
+    });
+  }
+
+  void _stopIncreasing() {
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTapDown: (_) => _startIncreasing(),
+          onTapUp: (_) => _stopIncreasing(),
+          child: Container(
+            color: HexColor('#1c3166'),
+            width: 30,
+            height: 90,
+          ),
+        ),
+        const SizedBox(height: 50),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            ClipPath(
+              clipper: MyClipper(),
+              child: Container(
+                  height: 300,
+                  width: 250,
+                  color: Colors.white,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        height: (ml / qtd_drink!.toInt()) * 300,
+                        width: double.infinity,
+                        color: HexColor('00A9D4'),
+                      ),
+                    ],
+                  ))),
+            ),
+            Text('$ml ml',
+                style: TextStyle(
+                    color: HexColor('#40ffdc'),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40))
+          ],
+        ),
+        // ),
+      ],
+    );
+  }
+}
+
+class CalendarioRandomizado extends StatelessWidget {
+  const CalendarioRandomizado({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Map<String, int> consumoDaSemana = _gerarConsumoDiario(qtd_drink!.toInt());
+
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+          color: HexColor('#00a9d4'), borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (String dia in ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'])
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    dia,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Container(
+                        width: 10,
+                        height: (consumoDaSemana[dia] ?? 0) /
+                            qtd_drink!.toInt() *
+                            100,
+                        color: HexColor('#1c3166')),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Map<String, int> _gerarConsumoDiario(int metaDiaria) {
+    Random random = Random();
+    Map<String, int> consumoDaSemana = {};
+    List<String> dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+    for (String dia in dias) {
+// Gera um valor aleatório para cada dia, garantindo que a soma não ultrapasse a meta
+      int consumo =
+          random.nextInt(metaDiaria ~/ 1.5); // Gera até metade da meta diária
+      consumoDaSemana[dia] = consumo;
+    }
+
+    return consumoDaSemana;
   }
 }

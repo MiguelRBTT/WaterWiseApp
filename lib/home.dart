@@ -19,6 +19,17 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF40FFDC),
+              Color(0xFF00A9D4),
+              Color(0xFF1C3166),
+            ],
+          ),
+        ),
         child: Column(
           children: [
             const Padding(
@@ -44,17 +55,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF40FFDC),
-              Color(0xFF00A9D4),
-              Color(0xFF1C3166),
-            ],
-          ),
         ),
       ),
     );

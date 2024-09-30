@@ -61,7 +61,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-     - assets\logo_oficial.png
+     - assets/logo_oficial.png
      - assets/waves.jpg
 
 
