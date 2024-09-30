@@ -2,12 +2,11 @@
 
 WaterWise é um aplicativo para ajudar você a monitorar sua ingestão diária de água de forma simples e intuitiva. Através de uma calculadora personalizada e um calendário de progresso, você pode acompanhar e garantir que está bebendo a quantidade adequada de água diariamente.
 
-Capturas de tela
 Tela de Início!
 [Screenshot_2024-09-29-23-08-56-761_com example waterwisen1](https://github.com/user-attachments/assets/a2d74f3d-506c-444f-b4bd-1d842d6ffb05)
 
-Calculadora de Água
-![Screenshot_2024-09-29-23-09-04-411_com example waterwisen1](https://github.com/user-attachments/assets/e0023ac3-7f3b-4da8-ad34-80af634b4fd1)
+Calculadora de Água!
+[Screenshot_2024-09-29-23-09-04-411_com example waterwisen1](https://github.com/user-attachments/assets/e0023ac3-7f3b-4da8-ad34-80af634b4fd1)
 
 Informe seu peso, e o app calcula automaticamente a quantidade de água recomendada para beber diariamente.
 
